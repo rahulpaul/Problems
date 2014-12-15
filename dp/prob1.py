@@ -50,8 +50,8 @@ def get_denom_list_from_solution(solution_dict, target_sum):
 
 
 def main():
-    denom_list = [3, 7]
-    target_sum = 13
+    denom_list = [1, 3, 5]
+    target_sum = 11
     print first_solution(denom_list, target_sum)
 
 
