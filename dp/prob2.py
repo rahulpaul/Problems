@@ -27,11 +27,42 @@ def first_solution(sequence):
     return max(solution.itervalues(), key=lambda x: len(x))
 
 
+def alternate_solution(a):
+    sol = {}  # key is index value is solution ending with element of that index
+    optimal_sol = []
+    for i, e in enumerate(a):
+        s = None
+        for j in range(i):
+            if e >= sol[j][-1]:
+                new_s = 1 + len(sol[j]), j
+                if s is None or new_s[0] > s[0]:
+                    s = new_s
+        if s is None:
+            sol[i] = [e]
+        else:
+            sol[i] = list(sol[s[1]])
+            sol[i].append(e)
+
+        if len(optimal_sol) < len(sol[i]):
+            optimal_sol = sol[i]
+
+    return optimal_sol
+
+
 def main():
-    s1 = (5, 3, 4, 8, 6, 7)
-    print s1, first_solution(s1)
-    s2 = (0, 8, 4, 12, 2, 10, 6, 14, 1, 9, 5, 13, 3, 11, 7, 15)
-    print s2, first_solution(s2)
+    a1 = (5, 3, 4, 8, 6, 7)
+    s1 = first_solution(a1)
+    s2 = alternate_solution(a1)
+    assert s1 == s2
+    print s1
+    print s2
+
+    a2 = (0, 8, 4, 12, 2, 10, 6, 14, 1, 9, 5, 13, 3, 11, 7, 15)
+    s1 = first_solution(a2)
+    s2 = alternate_solution(a2)
+    assert s1 == s2
+    print s1
+    print s2
 
 
 if __name__ == '__main__':
