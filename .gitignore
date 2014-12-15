@@ -1,0 +1,8 @@
+.idea
+eggs
+parts
+develop-eggs
+bin
+ceres.egg-info
+.installed.cfg
+.pyc
