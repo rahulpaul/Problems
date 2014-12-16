@@ -97,48 +97,78 @@ class ZigZag(object):
         return max(solution.itervalues(), key=lambda x: len(x))
 
 
+def alternate_solution(a):
+    sol = {}
+    for i, e in enumerate(a):
+        sol[i] = [e]
+        for j in xrange(i):
+            if is_admissible(sol[j], e) and ((1 + len(sol[j])) > len(sol[i])):
+                sol[i] = list(sol[j])
+                sol[i].append(e)
+    return max(sol.itervalues(), key=len)
+
+
+def is_admissible(s, e):
+    if len(s) == 0:
+        return True
+    if len(s) == 1:
+        return s[0] != e
+    d1 = s[-1] - s[-2]
+    d2 = e - s[-1]
+    return d1 * d2 < 0
+
+
 def main():
     s1 = (1, 7, 4, 9, 2, 5)
-    result = ZigZag.longest_zig_zag(s1)
-    print len(result), result
-    assert len(result) == 6
+    r11 = ZigZag.longest_zig_zag(s1)
+    r12 = alternate_solution(s1)
+    assert len(r11) == len(r12)
+    print len(r11), r11
+
 
     s2 = (1, 17, 5, 10, 13, 15, 10, 5, 16, 8)
-    result = ZigZag.longest_zig_zag(s2)
-    print len(result), result
-    assert len(result) == 7
+    r21 = ZigZag.longest_zig_zag(s2)
+    r22 = alternate_solution(s2)
+    assert len(r21) == len(r22)
+    print len(r21), r21
 
     s3 = (44, )
-    result = ZigZag.longest_zig_zag(s3)
-    print len(result), result
-    assert len(result) == 1
+    r31 = ZigZag.longest_zig_zag(s3)
+    r32 = alternate_solution(s3)
+    assert len(r31) == len(r32)
+    print len(r31), r31
 
     s4 = (1, 2, 3, 4, 5, 6, 7, 8, 9)
-    result = ZigZag.longest_zig_zag(s4)
-    print len(result), result
-    assert len(result) == 2
+    r41 = ZigZag.longest_zig_zag(s4)
+    r42 = alternate_solution(s4)
+    assert len(r41) == len(r42)
+    print len(r41), r41
 
     s5 = (70, 55, 13, 2, 99, 2, 80, 80, 80, 80, 100, 19, 7, 5, 5, 5, 1000, 32, 32)
-    result = ZigZag.longest_zig_zag(s5)
-    print len(result), result
-    assert len(result) == 8
+    r51 = ZigZag.longest_zig_zag(s5)
+    r52 = alternate_solution(s5)
+    assert len(r51) == len(r52)
+    print len(r51), r51
 
     s6 = (374, 40, 854, 203, 203, 156, 362, 279, 812, 955, 600, 947, 978, 46, 100, 953, 670, 862, 568, 188, 67, 669,
           810, 704, 52, 861, 49, 640, 370, 908, 477, 245, 413, 109, 659, 401, 483, 308, 609, 120, 249, 22, 176, 279, 23,
           22, 617, 462, 459, 244)
-    result = ZigZag.longest_zig_zag(s6)
-    print len(result), result
-    assert len(result) == 36
+    r61 = ZigZag.longest_zig_zag(s6)
+    r62 = alternate_solution(s6)
+    assert len(r61) == len(r62)
+    print len(r61), r61
 
     s7 = (1, 0, 0, 0, 2, 2, 2, 2, 1, 1, 1, 1, 2, 2, 2, 2, 1, 1, 1, 1, 2, 2, 2, 2)
-    result = ZigZag.longest_zig_zag(s7)
-    print len(result), result
-    assert len(result) == 7
+    r71 = ZigZag.longest_zig_zag(s7)
+    r72 = alternate_solution(s7)
+    assert len(r71) == len(r72)
+    print len(r71), r71
 
     s8 = (1, 3, 2, 7, 3, 201, 200, 8, 13, 8, 13, 8)
-    result = ZigZag.longest_zig_zag(s8)
-    print len(result), result
-    assert len(result) == 11
+    r81 = ZigZag.longest_zig_zag(s8)
+    r82 = alternate_solution(s8)
+    assert len(r81) == len(r82)
+    print len(r81), r81
 
 
 if __name__ == '__main__':
