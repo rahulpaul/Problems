@@ -10,7 +10,8 @@ __author__ = 'rahul'
 
 def first_solution(sequence):
     if all(e < 0 for e in sequence):
-        return [min(sequence)]
+        e = min(sequence)
+        return e, [e]
     solution = []
     current_opt = 0, []
     for i, e in enumerate(sequence):
@@ -27,14 +28,14 @@ def first_solution(sequence):
 
 def main():
     s1 = (-2, 1, -3, 4, -1, 2, 1, -5, 4)
-    result = first_solution(s1)
+    result = first_solution(s1)[1]
     print result
-    assert result[0] == 6
+    assert sum(result) == 6
 
     s2 = (-2, -1, -3, 4, -1, -2, -1, -5, -4)
-    result = first_solution(s2)
+    result = first_solution(s2)[1]
     print result
-    assert result[0] == 4
+    assert sum(result) == 4
 
 
 if __name__ == '__main__':
