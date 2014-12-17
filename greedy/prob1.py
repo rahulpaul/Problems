@@ -72,53 +72,85 @@ class InvalidIntervalError(Exception):
     pass
 
 
-class Credit(object):
+class CreditCounter(object):
 
-    def __init__(self, int_min_start=None):
-        self.int_min_start = int_min_start if int_min_start else -1
-        self.entries = []
-        self.int_judges = set()
+    class Credit(object):
 
-    @property
-    def int_start(self):
-        try:
-            return self.entries[0][0]
-        except IndexError:
-            return -1
+        def __init__(self, int_min_start=None, buzz_entries=None):
+            self.int_min_start = int_min_start if int_min_start else -1
+            self.buzz_entries = []
+            self.int_judges = set()
+            if buzz_entries:
+                for entry in buzz_entries:
+                    self.add_buzz(entry)
 
-    @property
-    def int_end(self):
-        try:
-            return self.entries[-1][0]
-        except IndexError:
-            return -1
+        @property
+        def int_start(self):
+            try:
+                return self.buzz_entries[0][0]
+            except IndexError:
+                return -1
 
-    def buzz_count(self):
-        return len(self.int_judges)
+        @property
+        def int_end(self):
+            try:
+                return self.buzz_entries[-1][0]
+            except IndexError:
+                return -1
 
-    def is_complete(self):
-        return self.buzz_count() == 3
+        def buzz_count(self):
+            return len(self.int_judges)
 
-    def __str__(self):
-        return '[%s, %s]' % (self.int_start, self.int_end)
+        def is_complete(self):
+            return self.buzz_count() == 3
 
-    def add_buzz(self, entry):
-        judge = entry[1]
-        ts = entry[0]
-        if self.buzz_count() == 0:
-            if ts > self.int_min_start:
-                self.entries.append(entry)
-                self.int_judges.add(judge)
-        elif ts - self.int_start <= 1000:
-            if judge not in self.int_judges:
-                self.entries.append(entry)
-                self.int_judges.add(judge)
+        def add_buzz(self, buzz_entry):
+            judge = buzz_entry[1]
+            ts = buzz_entry[0]
+            if self.buzz_count() == 0:
+                if ts > self.int_min_start:
+                    self.buzz_entries.append(buzz_entry)
+                    self.int_judges.add(judge)
+            elif ts - self.int_start <= 1000:
+                if judge not in self.int_judges:
+                    self.buzz_entries.append(buzz_entry)
+                    self.int_judges.add(judge)
+                else:
+                    if self.buzz_entries[0][1] == judge:
+                        del self.buzz_entries[0]
+                        self.buzz_entries.append(buzz_entry)
             else:
-                if self.entries[0][1] == judge:
-                    del self.entries[0]
-                    self.entries.append(entry)
-        else:
-            raise InvalidIntervalError()
+                raise InvalidIntervalError()
+
+        def __str__(self):
+            return '[%s, %s]' % (self.int_start, self.int_end)
+
+    def __init__(self):
+        self.count = 0
+        self.current_credit = self.Credit()
+
+    def add_buzz(self, buzz_entry):
+        try:
+            self.current_credit.add_buzz(buzz_entry)
+            if self.current_credit.is_complete():
+                print self.current_credit,
+                self.count += 1
+                self.current_credit = self.Credit(int_min_start=self.current_credit.int_end)
+        except InvalidIntervalError:
+            int_start = self.current_credit.int_start
+            int_entries = list(self.current_credit.buzz_entries)
+            while True:
+                try:
+                    entry = int_entries[0]
+                    if entry[0] == int_start:
+                        del int_entries[0]
+                    else:
+                        break
+                except IndexError:
+                    break
+
+            self.current_credit = self.Credit(buzz_entries=int_entries)
+            self.current_credit.add_buzz(buzz_entry)
 
 
 def solution(a, b, c, d, e):
@@ -131,20 +163,11 @@ def solution(a, b, c, d, e):
 
     del aa, bb, cc, dd, ee
 
-    cr = Credit()
-    cr_cnt = 0
+    cr_cntr = CreditCounter()
     for t in xx:
-        try:
-            cr.add_buzz(t)
-            if cr.is_complete():
-                print cr,
-                cr_cnt += 1
-                cr = Credit(cr.int_end)
-        except InvalidIntervalError:
-            cr = Credit()
-            cr.add_buzz(t)
-
-    return cr_cnt
+        cr_cntr.add_buzz(t)
+    print ''
+    return cr_cntr.count
 
 
 def main():
@@ -160,6 +183,14 @@ def main():
     c = [900, 902, 1200, 4000, 5000, 6001]
     d = [0, 2000, 6002]
     e = [1, 2, 3, 4, 5, 6, 7, 8]
+
+    print solution(a, b, c, d, e)
+
+    a = [5000, 6500]
+    b = [6000]
+    c = [6500]
+    d = [6000]
+    e = [0, 5800, 6000]
 
     print solution(a, b, c, d, e)
 
