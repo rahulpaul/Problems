@@ -1,3 +1,5 @@
+# Problem: https://www.hackerrank.com/challenges/sherlock-and-anagrams/problem
+
 def count_anagrams(s: str):
     anagram_count = 0
     g = gen_substrings()
