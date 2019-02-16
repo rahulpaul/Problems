@@ -79,13 +79,14 @@ class FraudDetector:
                             if left > c[0]:
                                 median = key
                                 break
-                            elif left == c[0] and len(c) == 1:
-                                median = key
-                                break
-                            elif left == c[0] and len(c) == 2:
-                                next_key = sorted_keys[key_index + 1]
-                                median = (key + next_key) / 2
-                                break
+                            elif left == c[0]:
+                                if len(c) == 1:
+                                    median = key
+                                    break
+                                elif len(c) == 2:
+                                    next_key = sorted_keys[key_index + 1]
+                                    median = (key + next_key) / 2
+                                    break
 
                         if value >= median:
                             fraud_count += 1
