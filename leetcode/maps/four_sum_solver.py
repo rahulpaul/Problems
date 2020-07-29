@@ -13,7 +13,7 @@ A solution set is:
 ]
 """
 
-from typing import List
+from typing import *
 
 
 class TwoSumSolver:
@@ -21,7 +21,7 @@ class TwoSumSolver:
     def __init__(self):
         pass
     
-    def solve(self, nums: List[int], target: int) -> List[List[int]]:
+    def solve(self, nums: List[int], target: int) -> Set[Tuple[int, int]]:
         results = set()
         i, j = 0, len(nums) - 1
         while i < j:
@@ -43,9 +43,8 @@ class FourSumSolver:
     def __init__(self):
         pass
     
-    def solve(self, nums: List[int], target: int) -> List[List[int]]:
+    def solve(self, nums: List[int], target: int) -> Set[Tuple[int, int, int, int]]:
         results = set()
-        i, j = 0, len(nums) - 1
         for i in range(len(nums)-3):
             for j in range(i+3, len(nums)):
                 solver = TwoSumSolver()
@@ -57,12 +56,9 @@ class FourSumSolver:
         return results
     
 
-
 class Solution:
     
-    def fourSum(self, nums: List[int], target: int) -> List[List[int]]:
+    def fourSum(self, nums: List[int], target: int) -> Set[Tuple[int, int, int, int]]:
         sorted_nums = sorted(nums)
         solver = FourSumSolver()
         return solver.solve(sorted_nums, target)
-                
-        
