@@ -97,6 +97,10 @@ def main():
     p = "mis*is*p*."
     assert not is_match(s, p)
 
+    s = "mississippi"
+    p = "mis*.s*.p*."
+    assert is_match(s, p)
+
 
 if __name__ == "__main__":
     main()
