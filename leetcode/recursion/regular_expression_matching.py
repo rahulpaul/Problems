@@ -50,23 +50,26 @@ def is_match(s: str, p: str, ps=0, pp=0) -> bool:
     if ps >= len(s) and pp >= len(p):
         return True
     
+    if ps >= len(s) and pp == len(p)-2 and p[pp+1] == '*':
+        return True
+
     if ps >= len(s):
         return False
     
     if pp >= len(p):
         return False
     
-    if s[ps] == p[pp] or p[pp] == '.':
-        return is_match(s, p, ps+1, pp+1)
-    
     if pp+1 < len(p) and p[pp+1] == '*':
         if p[pp] == s[ps] or p[pp] == '.':
-            # case1: atleast 1 repeation, 
-            return is_match(s, p, ps+1, pp)
+            # case1: atleast 1 repeation or no repeatation 
+            return is_match(s, p, ps+1, pp) or is_match(s, p, ps, pp+2)
         else:
             # case2: no-more repeatation
             return is_match(s, p, ps, pp+2)
     
+    if s[ps] == p[pp] or p[pp] == '.':
+        return is_match(s, p, ps+1, pp+1)
+
     return False
 
 
@@ -97,6 +100,10 @@ def main():
 
     s = "abbbbbbbbbbbbb"
     p = "ab*"
+    assert is_match(s, p)
+
+    s = "caab"
+    p = "ca*aab"
     assert is_match(s, p)
 
 
