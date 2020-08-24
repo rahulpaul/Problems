@@ -59,19 +59,13 @@ def is_match(s: str, p: str, ps=0, pp=0) -> bool:
     if s[ps] == p[pp] or p[pp] == '.':
         return is_match(s, p, ps+1, pp+1)
     
-    if p[pp] =='*':
-        # cases:
-        # 1. no repeataion case
-        # 2. repeatation
-        
-        if p[pp-1] == s[ps] or p[pp-1] == '.':
-            return is_match(s, p, ps+1, pp) or is_match(s, p, ps, pp+1) or is_match(s, p, ps+1, pp+1)
-        else:
-            return is_match(s, p, ps, pp+1)
-    
     if pp+1 < len(p) and p[pp+1] == '*':
-        # no repeatation case
-        return is_match(s, p, ps, pp+2)
+        if p[pp] == s[ps] or p[pp] == '.':
+            # case1: atleast 1 repeation, 
+            return is_match(s, p, ps+1, pp)
+        else:
+            # case2: no-more repeatation
+            return is_match(s, p, ps, pp+2)
     
     return False
 
@@ -99,6 +93,10 @@ def main():
 
     s = "mississippi"
     p = "mis*.s*.p*."
+    assert is_match(s, p)
+
+    s = "abbbbbbbbbbbbb"
+    p = "ab*"
     assert is_match(s, p)
 
 
