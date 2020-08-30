@@ -105,6 +105,30 @@ def main():
     print(f'output = {output}')
     assert output == [(1,2),(3,10),(12,16)]
 
+    intervals = [[5,8], [15, 18]]
+    newInterval = [2,3]
+    output = Solution().insert(intervals, newInterval)
+    print(f'output = {output}')
+    assert output == [(2,3), (5,8), (15,18)]
+
+    intervals = [[2,3], [5,8], [15,18]]
+    newInterval = [4, 12]
+    output = Solution().insert(intervals, newInterval)
+    print(f'output = {output}')
+    assert output == [(2,3), (4,12), (15,18)]
+
+    intervals = [[2,3], [5,8], [15,18]]
+    newInterval = [20, 24]
+    output = Solution().insert(intervals, newInterval)
+    print(f'output = {output}')
+    assert output == [(2,3), (5,8), (15,18), (20, 24)]
+
+    intervals = [[2,3], [5,8], [15,18], [20, 24]]
+    newInterval = [1,25]
+    output = Solution().insert(intervals, newInterval)
+    print(f'output = {output}')
+    assert output == [(1,25)]
+
 
 if __name__ == "__main__":
     main()
