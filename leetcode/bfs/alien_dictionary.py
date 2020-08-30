@@ -36,6 +36,7 @@ Output: ""
 
 Explanation: The order is invalid, so return "".
 """
+
 from typing import List, Set
 from collections import deque
 
@@ -121,9 +122,6 @@ def main():
     print(f"output: {decode_order(input_)}")
 
     input_ = ["z", "x", "y"]
-    print(f"output: {decode_order(input_)}")
-
-    input_ = ["z", "x", "z"]
     print(f"output: {decode_order(input_)}")
 
 
