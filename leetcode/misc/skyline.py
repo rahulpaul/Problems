@@ -1,7 +1,7 @@
 import heapq
 from typing import *
 from dataclasses import dataclass
-from sortedcontainers import SortedList
+from sortedcontainers import SortedDict
 
 
 
@@ -24,20 +24,28 @@ def _get_skyline_using_sorted_container(buildings: List[List[int]]) -> List[List
     i = 0
     last_x = None
     last_y = None
-    hts = SortedList()
+    hts = SortedDict()
     while i < len(points):
         point = points[i]
         if (last_x is not None) and (last_x != point.x):
             # add skyline point
-            max_ht = hts[-1] if hts else 0
+            max_ht = hts.keys()[-1] if hts else 0
             if max_ht != last_y:
                 skylines.append((last_x, max_ht))
                 last_y = max_ht
         
         if point.is_start:
-            hts.add(point.y)
+            if point.y not in hts:
+                hts[point.y] = 1
+            else:
+                hts[point.y] += 1
         else:
-            hts.remove(point.y)
+            val = hts[point.y]
+            val += -1
+            if val > 0:
+                hts[point.y] = val
+            else:
+                del hts[point.y]
         
         last_x = point.x
         i += 1
@@ -131,8 +139,10 @@ class Solution:
 
 def main():
     buildings = [[2,9,10],[3,7,15],[5,12,12],[15,20,10],[19,24,8]]
-    skyline = [[2,10],[3,15],[7,12],[12,0],[15,10],[20,8],[24,0]]
-    assert Solution().getSkyline(buildings) == skyline
+    skyline = [(2,10),(3,15),(7,12),(12,0),(15,10),(20,8),(24,0)]
+    output = Solution().getSkyline(buildings)
+    print(output)
+    assert output == skyline
 
 
 if __name__ == "__main__":
