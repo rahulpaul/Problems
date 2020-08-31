@@ -23,7 +23,7 @@ Explanation: The same letters are at least distance 2 from each other.
 
 import heapq
 from typing import *
-from collections import defaultdict, deque
+from collections import defaultdict
 
 
 class EmptyHeap(Exception):
@@ -33,23 +33,16 @@ class EmptyHeap(Exception):
 class MaxHeap:
     def __init__(self, func):
         self.func = func
-        self.keys = []
-        self.data_map = {}
+        self.entries = []
         
     def push(self, val):
         key = -1 * self.func(val)
-        heapq.heappush(self.keys, key)
-        if key not in self.data_map:
-            self.data_map[key] = deque()
-        self.data_map[key].append(val)
+        heapq.heappush(self.entries, (key, val))
     
     def pop(self):
-        if not self.keys:
+        if not self.entries:
             raise EmptyHeap()
-        key = heapq.heappop(self.keys)
-        val = self.data_map[key].popleft()
-        if len(self.data_map[key]) == 0:
-            del self.data_map[key]
+        key, val = heapq.heappop(self.entries)
         return val
     
     def __len__(self) -> int:
@@ -118,7 +111,7 @@ def main():
     k = 2
     output = _rearrange(s, k)
     print(output)
-    assert output == "abcadbca"
+    assert output in ["abacabcd", "abcadbca"]
 
 
 if __name__ == "__main__":
