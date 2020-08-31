@@ -44,9 +44,6 @@ class MaxHeap:
             raise EmptyHeap()
         key, val = heapq.heappop(self.entries)
         return val
-    
-    def __len__(self) -> int:
-        return len(self.keys)
 
 
 def _char_counts(s: str) -> Dict[str, int]:
