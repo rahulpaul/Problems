@@ -55,7 +55,7 @@ arr = [3,2,1,1,1,3], target = 3
 
 def find_subarrays(arr: List[int], target: int):
     cumsum = 0
-    cumsum_to_index = {}
+    cumsum_to_index = {0: -1}
     subarrays = []
     for i, num in enumerate(arr):
         cumsum += num
@@ -109,10 +109,44 @@ def min_mapping(arr: List[int]):
         output[i] = current_min
     return output
 
+
+from typing import *
+
+MAX = 2**31 - 1
+
+
+def min_sum_of_lengths_using_sliding_window(arr: List[int], target: int) -> int:
+    n = len(arr)
+    presum = 0  # prefix sum
+    left = 0
+    min_lens = [MAX] * n
+    min_len = MAX
+    ans = MAX
+    for right in range(n):
+        presum += arr[right]
+        while presum > target:
+            presum -= arr[left]
+            left += 1
+
+        if presum == target:
+            curr_len = right - left + 1
+            min_len = min(min_len, curr_len)
+            if left > 0 and min_lens[left-1] != MAX:
+                ans = min(ans, curr_len + min_lens[left-1])
+
+        min_lens[right] = min_len
+    
+    return -1 if ans == MAX else ans 
+
+
+def min_sum_of_lengths_using_intervals(arr: List[int], target: int) -> int:
+    intervals = find_subarrays(arr, target)
+    return find_min_non_overlapping_intervals(intervals)
+
 class Solution:
     def minSumOfLengths(self, arr: List[int], target: int) -> int:
-        intervals = find_subarrays(arr, target)
-        return find_min_non_overlapping_intervals(intervals)
+        # return min_sum_of_lengths_using_intervals(arr, target)
+        return min_sum_of_lengths_using_sliding_window(arr, target)
 
 
 def main():
