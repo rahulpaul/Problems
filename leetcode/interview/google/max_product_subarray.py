@@ -18,18 +18,24 @@ from typing import *
 
 
 def max_product(nums: List[int]) -> int:
-    output = [None for _ in range(len(nums))]
+    output_max: List[Optional[int]] = [None for _ in range(len(nums))]
+    output_min: List[Optional[int]] = [None for _ in range(len(nums))]
     for i in range(len(nums)-1, -1, -1):
         if i == len(nums) - 1:
-            output[i] = nums[i]
+            output_max[i] = output_min[i] = nums[i]
         else:
-            output[i] = max(nums[i], nums[i] * output[i+1])
-    return max(output)
+            output_max[i] = max(nums[i], nums[i] * output_max[i+1], nums[i] * output_min[i+1])
+            output_min[i] = min(nums[i], nums[i] * output_max[i+1], nums[i] * output_min[i+1])
+    return max(output_max)
 
 
 def main():
     assert max_product([2,3,-2,4]) == 6
     assert max_product([-2,0,-1]) == 0
+
+    val = max_product([-2, 1, -1])
+    print(val)
+    assert val == 2
 
 
 if __name__ == "__main__":
